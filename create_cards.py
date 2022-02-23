@@ -33,8 +33,8 @@ def create_card (word):
     fill = black,
     anchor = "mm",
     align = "center")
-  #rot_img = img.rotate(270, fillcolor = white)
-  img.save(output_dir + "/" + word + ".png")
+  rot_img = img.rotate(270, fillcolor = white, expand=True)
+  rot_img.save(output_dir + "/" + word + ".png")
 
 def add_line_break(font, word):
   if font.getsize(word)[0] < marginal_width or ' ' not in word:
