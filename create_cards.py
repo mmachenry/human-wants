@@ -10,7 +10,7 @@ black = (0,0,0)
 white = (255,255,255)
 font_file = 'easy-print.regular.ttf'
 output_dir = "cards"
-margin = 0.05
+margin = 0.10
 marginal_width = width - width * margin * 2
 
 def main (filename):
@@ -19,6 +19,7 @@ def main (filename):
   with open(filename, 'r') as f:
     for line in f:
       create_card(line.rstrip())
+  create_blank_cards(10)
 
 def create_card (word):
   font = ImageFont.truetype(font_file, max_font_size)
@@ -55,6 +56,12 @@ def fit_to_card (font, lines):
     size -= 1
     new_font = ImageFont.truetype(font_file, size)
   return new_font
+
+def create_blank_cards (n):
+  img = Image.new('RGB', (width, height), color = white)
+  rot_img = img.rotate(270, fillcolor = white, expand=True)
+  for i in range(0,n):
+    rot_img.save(output_dir + "/blank_" + str(i) + ".png")
 
 if __name__ == "__main__":
   main(sys.argv[1])
