@@ -12,6 +12,9 @@ font_file = 'easy-print.regular.ttf'
 output_dir = "cards"
 margin = 0.10
 marginal_width = width - width * margin * 2
+border_width = 60
+border_color = (50,50,50)
+border_font_size = round(border_width * 0.8)
 
 def main (filename):
   if not os.path.exists(output_dir):
@@ -25,8 +28,14 @@ def create_card (word):
   font = ImageFont.truetype(font_file, max_font_size)
   text = add_line_break(font, word)
   fit_font = fit_to_card (font, text)
-  img = Image.new('RGB', (width, height), color = white)
+  img = Image.new('RGB', (width, height), color = border_color)
   draw = ImageDraw.Draw(img)
+  draw.rectangle(
+    [(border_width,border_width),(width-border_width,height-border_width)],
+    fill=white)
+
+  draw_border_text(img, font_file, word)
+
   draw.multiline_text(
     (width / 2, height / 2),
     "\n".join(text),
@@ -36,6 +45,20 @@ def create_card (word):
     align = "center")
   rot_img = img.rotate(270, fillcolor = white, expand=True)
   rot_img.save(output_dir + "/" + word + ".png")
+
+def draw_border_text(img, font_file, word):
+  border_font = ImageFont.truetype(font_file, border_font_size)
+  text_img = Image.new('RGB', (width, border_width), color = border_color)
+  draw = ImageDraw.Draw(text_img)
+  draw.text(
+    (border_width, border_width/2),
+    word,
+    font = border_font,
+    fill = white,
+    anchor = "lm")
+  rot_text_img = text_img.rotate(180)
+  img.paste(text_img, (0, height-border_width))
+  img.paste(rot_text_img, (0, 0))
 
 def add_line_break(font, word):
   if font.getsize(word)[0] < marginal_width or ' ' not in word:
