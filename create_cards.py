@@ -13,7 +13,7 @@ output_dir = "cards"
 margin = 0.10
 marginal_width = width - width * margin * 2
 border_width = 60
-border_color = (50,50,50)
+border_color = black #(50,50,50)
 border_font_size = round(border_width * 0.8)
 
 def main (filename):
@@ -40,7 +40,7 @@ def create_card (word):
     (width / 2, height / 2),
     "\n".join(text),
     font = fit_font,
-    fill = black,
+    fill = border_color,
     anchor = "mm",
     align = "center")
   rot_img = img.rotate(270, fillcolor = white, expand=True)
